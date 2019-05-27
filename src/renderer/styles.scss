@@ -1,4 +1,7 @@
+@import 'variables';
+
 :global html {
+  background-color: $background-color;
   height: 100%;
 }
 
@@ -7,7 +10,7 @@
 }
 
 :global body {
-  font-family: "San Francisco", "Helvetica Nueue", "Helvetica", sans-serif;
+  font-family: 'San Francisco', 'Helvetica Nueue', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;

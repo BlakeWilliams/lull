@@ -1,4 +1,9 @@
+@import 'variables';
+
 .container {
-  max-height: 100%;
+  background-color: $background-color;
+  color: #fff;
+  padding: 14px;
+  height: 100%;
   overflow: scroll;
 }

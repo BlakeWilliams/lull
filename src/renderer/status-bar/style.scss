@@ -1,0 +1,7 @@
+@import 'variables';
+
+.bar {
+  border-bottom: 1px solid $border-color;
+  height: $status-bar-padding;
+  -webkit-app-region: drag;
+}

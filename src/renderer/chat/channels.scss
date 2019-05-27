@@ -1,6 +1,8 @@
+@import 'variables';
+
 .channels {
-  background-color: #646464;
-  padding: 10px;
+  background-color: $sidebar-background-color;
+  border-right: 1px solid $border-color;
   height: 100%;
   min-width: 195px;
   overflow-y: scroll;
@@ -9,10 +11,11 @@
 .channel {
   color: #eee;
   display: block;
-  padding-bottom: 4px;
+  padding: 6px 14px;
+  cursor: default;
 }
 
 .selectedChannel {
+  background-color: $sidebar-selected-color;
   color: #fff;
-  font-weight: bold;
 }
