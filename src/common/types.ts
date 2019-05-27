@@ -42,6 +42,7 @@ export interface Channel {
 }
 
 export const ADD_MESSAGE = 'ADD_MESSAGE'
+export const SEND_MESSAGE = 'SEND_MESSAGE'
 
 export interface Message {
   id: string
@@ -56,6 +57,11 @@ export interface AddMessageAction {
     channelID: string
     message: Message
   }
+}
+
+export interface SendMessageAction {
+  type: typeof SEND_MESSAGE
+  payload: string
 }
 
 export const ADD_USER = 'ADD_USER'

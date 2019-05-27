@@ -36,10 +36,10 @@ export function addChannel(rawChannel: any) {
 
 export function addMessage(channelID: string, rawMessage: any) {
   const message = {
-    id: rawMessage.client_msg_id,
+    id: channelID + rawMessage.ts,
     text: rawMessage.text,
     userID: rawMessage.user,
-    timestamp: Date.parse(rawMessage.ts),
+    timestamp: new Date(rawMessage.ts * 1000),
   }
   store.dispatch({
     type: ADD_MESSAGE,

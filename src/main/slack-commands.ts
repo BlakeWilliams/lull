@@ -17,9 +17,7 @@ class SlackCommands {
   }
 
   async fetchMessages(channelID: string) {
-    const serverID = store.getState().servers.id
-    const server = this.servers[serverID]
-    const history = await server.webClient.channels.history({
+    const history = await this.currentServer.webClient.channels.history({
       channel: channelID,
     })
 
@@ -27,12 +25,30 @@ class SlackCommands {
       addMessage(channelID, rawMessage)
     })
   }
+
+  async sendMessage(text: string) {
+    this.currentServer.sendMessage(this.currentChannelID, text)
+  }
+
+  private get currentChannelID(): string {
+    const state = store.getState()
+    return state.servers.selectedChannel!
+  }
+
+  private get currentServer() {
+    const serverID = store.getState().servers.id
+    return this.servers[serverID]
+  }
 }
 
 const commands = new SlackCommands()
 
 ipcMain.on('slack.fetchMessages', (event: any, channelID: string) => {
   commands.fetchMessages(channelID)
+})
+
+ipcMain.on('slack.sendMessage', (event: any, text: string) => {
+  commands.sendMessage(text)
 })
 
 export default commands

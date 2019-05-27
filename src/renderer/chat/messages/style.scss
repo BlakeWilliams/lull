@@ -4,6 +4,7 @@
   background-color: $background-color;
   color: #fff;
   height: 100%;
+  max-width: 100%;
   overflow: scroll;
 }
 
@@ -33,7 +34,7 @@
   img {
     width: 42px;
     height: 42px;
-    padding-top: 2px;
+    margin-top: 2px;
     border-radius: 50%;
   }
 }
@@ -49,6 +50,7 @@
 
 .text {
   color: rgb(240, 240, 250);
+  word-wrap: break-word;
 }
 
 .text + .text {

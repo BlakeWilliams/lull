@@ -1,0 +1,18 @@
+@import 'variables';
+
+.container {
+  border-top: 1px solid $border-color;
+  padding: 8px 14px;
+}
+
+.input {
+  appearance: none;
+  background-color: lighten($sidebar-background-color, 5);
+  border-radius: 30px;
+  border: 1px solid lighten($background-color, 20);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  padding: 4px 10px;
+  width: 100%;
+}

@@ -1,5 +1,5 @@
 import { RTMClient } from '@slack/rtm-api'
-
+import store from './store'
 import { addChannel, addMessage, addServer, addUser } from './slack-manager'
 
 class Server {
@@ -11,7 +11,7 @@ class Server {
     this.rtm = new RTMClient(token)
   }
 
-  connect(): Promise<void> {
+  public connect(): Promise<void> {
     return this.rtm
       .start()
       .then((data: any) => {
@@ -25,6 +25,19 @@ class Server {
       .catch(err => {
         console.log('Could not connect to server: ', err)
       })
+  }
+
+  public async sendMessage(channelID: string, text: string): Promise<string> {
+    const userID = store.getState().servers.selfID
+    const sendResult = await this.rtm.sendMessage(text, channelID)
+
+    // has to be formatted as if slack provided the message
+    addMessage(channelID, {
+      text: text,
+      user: userID,
+      ts: sendResult.ts,
+    })
+    return sendResult.ts
   }
 
   public get webClient() {
@@ -58,7 +71,7 @@ class Server {
   private addHandlers() {
     // TODO handle most of these events https://api.slack.com/rtm
 
-    this.rtm.on('message', addMessage)
+    this.rtm.on('message', (data: any) => addMessage(data.channel, data))
     this.rtm.on('channel_joined', (data: any) => addChannel(data.channel))
     this.rtm.on('channel_rename', (data: any) => addChannel(data.channel))
   }

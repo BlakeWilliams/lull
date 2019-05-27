@@ -68,7 +68,7 @@ const mapStateToProps = (state: AppState) => {
   const messages = state.messages[selectedChannel] || []
 
   return {
-    messages: sortBy(messages, 'timestamp').reverse(),
+    messages: sortBy(messages, 'timestamp'),
   }
 }
 

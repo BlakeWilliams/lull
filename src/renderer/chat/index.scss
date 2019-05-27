@@ -4,3 +4,9 @@
   height: calc(100% - #{$status-bar-padding});
   display: flex;
 }
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

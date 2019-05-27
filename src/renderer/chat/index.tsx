@@ -1,6 +1,7 @@
 import React from 'react'
 import Channels from './channels'
 import Messages from './messages/index'
+import NewMessage from './new-message/index'
 
 import styles from './index.scss'
 
@@ -9,11 +10,13 @@ interface State {}
 
 class Chat extends React.Component<Props, State> {
   render() {
-    const messages = [{ text: 'Hello' }]
     return (
       <div className={styles.main}>
         <Channels />
-        <Messages />
+        <div className={styles.messageContainer}>
+          <Messages />
+          <NewMessage />
+        </div>
       </div>
     )
   }
