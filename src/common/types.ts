@@ -9,18 +9,15 @@ export interface SelectChannelAction {
 
 export interface AddServerAction {
   type: typeof ADD_SERVER
-  payload: {
-    id: string
-    name: string
-    domain: string
-    selfID: string
-    selfName: string
-  }
+  payload: Server
 }
 
 export interface AddChannelAction {
   type: typeof ADD_CHANNEL
-  payload: Channel
+  payload: {
+    serverID: string
+    channel: Channel
+  }
 }
 
 // Slack types
@@ -28,6 +25,7 @@ export interface Server {
   id: string
   name: string
   domain: string
+  image132: string
   self: {
     id: string
     name: string

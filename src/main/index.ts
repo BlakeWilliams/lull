@@ -3,7 +3,7 @@ import path from 'path'
 import { app, BrowserWindow } from 'electron'
 import isElectronDev from 'electron-is-dev'
 import store from './store'
-import Server from './slack'
+import Server from './server'
 import SlackCommands from './slack-commands'
 
 const server = new Server(process.env.SLACK_TOKEN)
@@ -14,17 +14,19 @@ server.connect().then(() => {
 let mainWindow: undefined | BrowserWindow
 
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({
-    titleBarStyle: 'hidden',
-    height: 600,
-    width: 800,
-    webPreferences: {
-      nodeIntegration: true,
-    },
-  })
+  setTimeout(() => {
+    mainWindow = new BrowserWindow({
+      titleBarStyle: 'hidden',
+      height: 600,
+      width: 800,
+      webPreferences: {
+        nodeIntegration: true,
+      },
+    })
 
-  mainWindow.loadURL(getHtmlPath('chat.html'))
-  mainWindow.webContents.openDevTools()
+    mainWindow.loadURL(getHtmlPath('chat.html'))
+    mainWindow.webContents.openDevTools()
+  }, 3000)
 })
 
 app.on('window-all-closed', () => {

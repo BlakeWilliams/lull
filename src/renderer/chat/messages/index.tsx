@@ -1,7 +1,7 @@
 import React from 'react'
 import { sortBy } from 'lodash'
 import { connect } from 'react-redux'
-import { Message } from '@common/types'
+import { Message, Server } from '@common/types'
 import { AppState } from '@renderer/store'
 
 import MessageRow from './message-row'
@@ -53,6 +53,7 @@ class Messages extends React.Component<Props> {
 
           return (
             <MessageRow
+              key={message.id}
               message={message}
               sameOwnerAsPreviousMessage={owner === previousOwner}
             />
@@ -64,7 +65,8 @@ class Messages extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: AppState) => {
-  const selectedChannel = state.servers.selectedChannel
+  const selectedServer = state.servers.selectedServer!
+  const selectedChannel = state.servers.servers[selectedServer].selectedChannel
   const messages = state.messages[selectedChannel] || []
 
   return {

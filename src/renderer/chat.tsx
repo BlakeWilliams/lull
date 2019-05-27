@@ -9,6 +9,9 @@ import StatusBar from '@renderer/status-bar'
 import Chat from './chat/index'
 import store from './store'
 
+// @ts-ignore
+window.store = store
+
 ReactDOM.render(
   <Provider store={store}>
     <StatusBar />

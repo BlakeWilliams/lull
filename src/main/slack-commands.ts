@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import store from './store'
-import Server from './slack'
+import Server from './server'
 import { addMessage } from './slack-manager'
 
 type Servers = { [key: string]: Server }
@@ -32,11 +32,13 @@ class SlackCommands {
 
   private get currentChannelID(): string {
     const state = store.getState()
-    return state.servers.selectedChannel!
+    const serverID = state.servers.selectedServer!
+    return state.servers.servers[serverID].selectedChannel!
   }
 
   private get currentServer() {
-    const serverID = store.getState().servers.id
+    const state = store.getState()
+    const serverID = state.servers.selectedServer!
     return this.servers[serverID]
   }
 }

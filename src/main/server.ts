@@ -1,9 +1,9 @@
 import { RTMClient } from '@slack/rtm-api'
-import store from './store'
 import { addChannel, addMessage, addServer, addUser } from './slack-manager'
 
 class Server {
   id: string
+  userID: string
   token: string
   rtm: RTMClient
 
@@ -11,13 +11,17 @@ class Server {
     this.rtm = new RTMClient(token)
   }
 
-  public connect(): Promise<void> {
+  public async connect(): Promise<void> {
     return this.rtm
       .start()
-      .then((data: any) => {
+      .then(async (data: any) => {
         this.id = data.team.id
-        addServer(data)
+        this.userID = data.self.id
 
+        const teamInfo = await this.getTeamInfo()
+        addServer(data, teamInfo)
+
+        this.getTeamInfo()
         this.addHandlers()
         this.fetchChannels()
         this.fetchUsers()
@@ -28,13 +32,12 @@ class Server {
   }
 
   public async sendMessage(channelID: string, text: string): Promise<string> {
-    const userID = store.getState().servers.selfID
     const sendResult = await this.rtm.sendMessage(text, channelID)
 
     // has to be formatted as if slack provided the message
     addMessage(channelID, {
       text: text,
-      user: userID,
+      user: this.userID,
       ts: sendResult.ts,
     })
     return sendResult.ts
@@ -45,9 +48,14 @@ class Server {
     return this.rtm.webClient
   }
 
+  private async getTeamInfo(): Promise<any> {
+    const data = await this.webClient.team.info()
+    return data.team
+  }
+
   private async fetchChannels() {
     const channelResponse = await this.webClient.channels.list()
-    channelResponse.channels.forEach(addChannel)
+    channelResponse.channels.forEach((data: any) => addChannel(this.id, data))
   }
 
   private async fetchUsers() {
@@ -72,8 +80,12 @@ class Server {
     // TODO handle most of these events https://api.slack.com/rtm
 
     this.rtm.on('message', (data: any) => addMessage(data.channel, data))
-    this.rtm.on('channel_joined', (data: any) => addChannel(data.channel))
-    this.rtm.on('channel_rename', (data: any) => addChannel(data.channel))
+    this.rtm.on('channel_joined', (data: any) =>
+      addChannel(this.id, data.channel),
+    )
+    this.rtm.on('channel_rename', (data: any) =>
+      addChannel(this.id, data.channel),
+    )
   }
 }
 

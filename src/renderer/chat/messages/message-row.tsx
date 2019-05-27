@@ -35,8 +35,10 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
             </span>
           )}
 
-          {message.text.split('\n').map(text => (
-            <span className={styles.text}>{text}</span>
+          {message.text.split('\n').map((text, index) => (
+            <span key={index} className={styles.text}>
+              {text}
+            </span>
           ))}
         </div>
       </div>
@@ -45,10 +47,11 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
 }
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
+  const serverID = state.servers.selectedServer
   const userID = ownProps.message.userID
 
   return {
-    user: state.users[state.servers.id][userID],
+    user: state.users[serverID][userID],
   }
 }
 

@@ -8,29 +8,40 @@ import {
   ADD_USER,
 } from '@common/types'
 
-export function addServer(rtmData: any) {
+export function addServer(rtmData: any, teamInfo: any) {
+  console.log(rtmData)
   const action: AddServerAction = {
     type: ADD_SERVER,
     payload: {
       id: rtmData.team.id,
       name: rtmData.team.name,
       domain: rtmData.team.domain,
-      selfID: rtmData.self.id,
-      selfName: rtmData.self.name,
+      image132: teamInfo.icon.image_132,
+      channels: [],
+      self: {
+        id: rtmData.self.id,
+        name: rtmData.self.name,
+      },
     },
   }
 
   store.dispatch(action)
 }
 
-export function addChannel(rawChannel: any) {
+export function addChannel(serverID: string, rawChannel: any) {
   if (rawChannel.is_member) {
     const channel = {
       id: rawChannel.id,
       name: rawChannel.name,
       isChannel: rawChannel.is_channel || true,
     }
-    store.dispatch({ type: ADD_CHANNEL, payload: channel })
+    store.dispatch({
+      type: ADD_CHANNEL,
+      payload: {
+        serverID,
+        channel,
+      },
+    })
   }
 }
 

@@ -6,38 +6,59 @@ import {
   Channel,
   SELECT_CHANNEL,
   SelectChannelAction,
+  Server,
 } from '../../common/types'
 
-interface ServerState {
-  connected: boolean
+export interface SelectedChannelServer extends Server {
   selectedChannel?: string
-  id?: string
-  name?: string
-  domain?: string
-  selfID?: string
-  selfName?: string
-  channels: { [key: string]: Channel }
+}
+
+interface ServerState {
+  selectedServer?: string
+  servers: { [key: string]: SelectedChannelServer }
 }
 
 export default (
-  state: ServerState = { connected: false, channels: {} },
+  state: ServerState = { servers: {} },
   action: AddServerAction | AddChannelAction | SelectChannelAction,
 ) => {
   switch (action.type) {
     case ADD_SERVER:
       return {
         ...state,
-        ...action.payload,
+        selectedServer: state.selectedServer || action.payload.id,
+        servers: {
+          ...state.servers,
+          [action.payload.id]: {
+            selectedChannel: undefined,
+            ...action.payload,
+          },
+        },
       }
     case ADD_CHANNEL:
       return {
         ...state,
-        channels: { ...state.channels, [action.payload.id]: action.payload },
+        servers: {
+          ...state.servers,
+          [action.payload.serverID]: {
+            ...state.servers[action.payload.serverID],
+            channels: {
+              ...state.servers[action.payload.serverID].channels,
+              [action.payload.channel.id]: action.payload.channel,
+            },
+          },
+        },
       }
     case SELECT_CHANNEL:
       return {
         ...state,
-        selectedChannel: action.payload,
+        servers: {
+          ...state.servers,
+          [state.selectedServer]: {
+            ...state.servers[state.selectedServer],
+            selectedChannel: action.payload,
+          },
+        },
       }
     default:
       return state

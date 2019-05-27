@@ -10,3 +10,9 @@
   flex-direction: column;
   flex: 1;
 }
+
+.channelContainer {
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+}
