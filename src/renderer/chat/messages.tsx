@@ -33,8 +33,10 @@ class Messages extends React.Component<Props> {
     this.scrollToBottom()
   }
 
-  getSnapshotBeforeUpdate() {
-    // TODO check if we're already at the bottom of the file
+  getSnapshotBeforeUpdate(): any {
+    // TODO check if we're already at the bottom of the file, if so we can
+    // scroll. If not, we don't want to interrupt the users scrolling
+    return null
   }
 
   render() {
