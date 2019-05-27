@@ -2,6 +2,8 @@ import React from 'react'
 import Channels from './channels'
 import Messages from './messages'
 
+import styles from './index.scss'
+
 interface Props {}
 interface State {}
 
@@ -9,7 +11,7 @@ class Chat extends React.Component<Props, State> {
   render() {
     const messages = [{ text: 'Hello' }]
     return (
-      <div>
+      <div className={styles.main}>
         <Channels />
         <Messages />
       </div>

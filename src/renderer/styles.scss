@@ -1,3 +1,11 @@
+:global html {
+  height: 100%;
+}
+
+:global * {
+  box-sizing: border-box;
+}
+
 :global body {
   font-family: "San Francisco", "Helvetica Nueue", "Helvetica", sans-serif;
   height: 100%;

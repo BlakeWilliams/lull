@@ -6,9 +6,6 @@ import store from './store'
 import Server from './slack'
 import SlackCommands from './slack-commands'
 
-// dumb hack to make store used
-const _store = store
-
 const server = new Server(process.env.SLACK_TOKEN, store)
 server.connect().then(() => {
   SlackCommands.addServer(server)
