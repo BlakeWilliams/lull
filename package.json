@@ -1,0 +1,47 @@
+{
+  "name": "lull",
+  "version": "0.1.0",
+  "description": "Slack client for minimalists",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build-main": "webpack --config webpack.config.main.js",
+    "build-renderer": "webpack --config webpack.config.renderer.js",
+    "build": "yarn run build-main && yarn run build-renderer",
+    "start": "yarn run build-main && concurrently --kill-others \"yarn run watch-dev\" \"sleep 3 && yarn run electron dist/main/index.js\"",
+    "watch-dev": "yarn run webpack-dev-server --config webpack.config.renderer.js"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "@types/react-dom": "^16.8.4",
+    "concurrently": "^4.1.0",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^2.1.1",
+    "electron": "^5.0.2",
+    "electron-is-dev": "^1.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.17.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^6.0.1",
+    "typescript": "^3.4.5",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
+  },
+  "dependencies": {
+    "@slack/rtm-api": "^5.0.1",
+    "@slack/web-api": "^5.0.1",
+    "@types/lodash": "^4.14.132",
+    "@types/react-redux": "^7.0.9",
+    "classnames": "^2.2.6",
+    "electron-redux": "^1.4.0",
+    "lodash": "^4.17.11",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
+  }
+}
