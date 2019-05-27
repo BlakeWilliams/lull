@@ -1,9 +1,8 @@
-import { ADD_MESSAGE, AddMessageAction, Message } from '../../common/types'
+import { ADD_MESSAGE, AddMessageAction, Message } from '@common/types'
 
-type MessageState = Message[]
-type Messages = { [key: string]: MessageState }
+type State = { [key: string]: Message[] }
 
-export default (state: Messages = {}, action: AddMessageAction) => {
+export default (state: State = {}, action: AddMessageAction) => {
   switch (action.type) {
     case ADD_MESSAGE:
       const existingMessages = state[action.payload.channelID] || []

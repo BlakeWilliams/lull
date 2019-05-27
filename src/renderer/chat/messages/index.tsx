@@ -1,21 +1,75 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { sortBy } from 'lodash'
+import { connect } from 'react-redux'
+import { Message } from '@common/types'
+import { AppState } from '@renderer/store'
 
-interface Props {}
-interface State {}
+import MessageRow from './message-row'
+import styles from './style.scss'
 
-class Messages extends React.Component {
+interface Props {
+  messages: Message[]
+}
+
+class Messages extends React.Component<Props> {
+  atScrollBottom = true
+  scrollWindow = React.createRef<HTMLDivElement>()
+
+  scrollToBottom = () => {
+    const scrollWindow = this.scrollWindow.current
+    const scrollHeight = scrollWindow.scrollHeight
+    const height = scrollWindow.clientHeight
+    const maxScroll = scrollHeight - height
+
+    scrollWindow.scrollTop = maxScroll > 0 ? maxScroll : 0
+  }
+
+  componentDidUpdate() {
+    if (this.atScrollBottom) {
+      this.scrollToBottom()
+    }
+  }
+
+  componentDidMount() {
+    this.scrollToBottom()
+  }
+
+  getSnapshotBeforeUpdate(): any {
+    // TODO check if we're already at the bottom of the file, if so we can
+    // scroll. If not, we don't want to interrupt the users scrolling
+    return null
+  }
+
   render() {
-    const messages = [{ text: 'Hello' }]
+    const { messages } = this.props
+
+    let owner: string | null = null
+
     return (
-      <div>
-        <h1>messages</h1>
-        {messages.map(message => (
-          <h1>{message.text}</h1>
-        ))}
+      <div className={styles.container} ref={this.scrollWindow}>
+        {messages.map(message => {
+          let previousOwner = owner
+          owner = message.userID
+
+          return (
+            <MessageRow
+              message={message}
+              sameOwnerAsPreviousMessage={owner === previousOwner}
+            />
+          )
+        })}
       </div>
     )
   }
 }
 
-export default Messages
+const mapStateToProps = (state: AppState) => {
+  const selectedChannel = state.servers.selectedChannel
+  const messages = state.messages[selectedChannel] || []
+
+  return {
+    messages: sortBy(messages, 'timestamp').reverse(),
+  }
+}
+
+export default connect(mapStateToProps)(Messages)

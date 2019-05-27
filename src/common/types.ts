@@ -57,3 +57,25 @@ export interface AddMessageAction {
     message: Message
   }
 }
+
+export const ADD_USER = 'ADD_USER'
+
+export interface User {
+  id: string
+  name: string
+  realName: string
+  displayName: string
+  image24: string
+  image32: string
+  image48: string
+  image72: string
+  isBot: boolean
+}
+
+export interface AddUserAction {
+  type: typeof ADD_USER
+  payload: {
+    serverID: string
+    user: User
+  }
+}

@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
-import { ADD_MESSAGE, AddMessageAction, Message } from '@common/types'
 import store from './store'
 import Server from './slack'
+import { addMessage } from './slack-manager'
 
 type Servers = { [key: string]: Server }
 
@@ -24,19 +24,7 @@ class SlackCommands {
     })
 
     history.messages.forEach((rawMessage: any) => {
-      const message = {
-        id: rawMessage.client_msg_id,
-        text: rawMessage.text,
-        userID: rawMessage.user,
-        timestamp: Date.parse(rawMessage.ts),
-      }
-      store.dispatch({
-        type: ADD_MESSAGE,
-        payload: {
-          channelID,
-          message,
-        },
-      })
+      addMessage(channelID, rawMessage)
     })
   }
 }

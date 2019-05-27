@@ -1,6 +1,6 @@
 import React from 'react'
 import Channels from './channels'
-import Messages from './messages'
+import Messages from './messages/index'
 
 import styles from './index.scss'
 

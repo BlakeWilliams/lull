@@ -1,0 +1,56 @@
+@import 'variables';
+
+.container {
+  background-color: $background-color;
+  color: #fff;
+  height: 100%;
+  overflow: scroll;
+}
+
+.messageRow {
+  display: flex;
+  padding: 6px 14px;
+  border-top: 1px solid lighten($background-color, 5);
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.messageRow + .sameOwner {
+  border-top: none;
+}
+
+.sameOwner {
+  color: #f0f;
+}
+
+.imgContainer {
+  flex: 0 0 42px;
+  max-height: 42px;
+  margin-right: 7px;
+
+  img {
+    width: 42px;
+    height: 42px;
+    padding-top: 2px;
+    border-radius: 50%;
+  }
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.text {
+  color: rgb(240, 240, 250);
+}
+
+.text + .text {
+  margin-top: 4px;
+}

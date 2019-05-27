@@ -1,21 +1,13 @@
 import { RTMClient } from '@slack/rtm-api'
-import { WebAPICallResult } from '@slack/web-api'
-import {
-  ADD_SERVER,
-  ADD_CHANNEL,
-  AddServerAction,
-  AddChannelAction,
-  Channel,
-} from '../common/types'
+
+import { addChannel, addMessage, addServer, addUser } from './slack-manager'
 
 class Server {
   id: string
   token: string
-  store: any
   rtm: RTMClient
 
-  constructor(token: string, store: any) {
-    this.store = store
+  constructor(token: string) {
     this.rtm = new RTMClient(token)
   }
 
@@ -24,20 +16,11 @@ class Server {
       .start()
       .then((data: any) => {
         this.id = data.team.id
+        addServer(data)
 
-        const action: AddServerAction = {
-          type: ADD_SERVER,
-          payload: {
-            id: data.team.id,
-            name: data.team.name,
-            domain: data.team.domain,
-            selfID: data.self.id,
-            selfName: data.self.name,
-          },
-        }
-
-        this.store.dispatch(action)
+        this.addHandlers()
         this.fetchChannels()
+        this.fetchUsers()
       })
       .catch(err => {
         console.log('Could not connect to server: ', err)
@@ -51,18 +34,33 @@ class Server {
 
   private async fetchChannels() {
     const channelResponse = await this.webClient.channels.list()
-    channelResponse.channels.forEach((rawChannel: any) => {
-      if (rawChannel.is_member) {
-        const channel = {
-          id: rawChannel.id,
-          name: rawChannel.name,
-          isChannel: rawChannel.is_channel,
-        }
-        this.store.dispatch({ type: ADD_CHANNEL, payload: channel })
-      }
+    channelResponse.channels.forEach(addChannel)
+  }
 
-      console.log(this.store.getState())
-    })
+  private async fetchUsers() {
+    let data: any = await this.webClient.users.list()
+    let isPaginating = true
+
+    while (isPaginating) {
+      data.members.forEach(addUser)
+
+      if (data.response_metadata.next_cursor) {
+        this.webClient.users.list({
+          cursor: data.response_metadata.next_cursor,
+        })
+        isPaginating = true
+      } else {
+        isPaginating = false
+      }
+    }
+  }
+
+  private addHandlers() {
+    // TODO handle most of these events https://api.slack.com/rtm
+
+    this.rtm.on('message', addMessage)
+    this.rtm.on('channel_joined', (data: any) => addChannel(data.channel))
+    this.rtm.on('channel_rename', (data: any) => addChannel(data.channel))
   }
 }
 
