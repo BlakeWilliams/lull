@@ -1,7 +1,7 @@
 import { RTMClient } from '@slack/rtm-api'
-import { addChannel, addMessage, addServer, addUser } from './slack-manager'
+import { addChannel, addMessage, addTeam, addUser } from './slack-manager'
 
-class Server {
+class TeamConnection {
   id: string
   userID: string
   token: string
@@ -19,7 +19,7 @@ class Server {
         this.userID = data.self.id
 
         const teamInfo = await this.getTeamInfo()
-        addServer(data, teamInfo)
+        addTeam(data, teamInfo)
 
         this.getTeamInfo()
         this.addHandlers()
@@ -89,4 +89,4 @@ class Server {
   }
 }
 
-export default Server
+export default TeamConnection

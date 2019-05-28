@@ -1,23 +1,23 @@
 import { ipcMain } from 'electron'
 import store from './store'
-import Server from './server'
+import TeamConnection from './team-connection'
 import { addMessage } from './slack-manager'
 
-type Servers = { [key: string]: Server }
+type Teams = { [key: string]: TeamConnection }
 
 class SlackCommands {
-  servers: Servers
+  teams: Teams
 
   constructor() {
-    this.servers = {}
+    this.teams = {}
   }
 
-  addServer(server: Server) {
-    this.servers[server.id] = server
+  addTeam(team: TeamConnection) {
+    this.teams[team.id] = team
   }
 
   async fetchMessages(channelID: string) {
-    const history = await this.currentServer.webClient.channels.history({
+    const history = await this.currentTeam.webClient.channels.history({
       channel: channelID,
     })
 
@@ -27,19 +27,19 @@ class SlackCommands {
   }
 
   async sendMessage(text: string) {
-    this.currentServer.sendMessage(this.currentChannelID, text)
+    this.currentTeam.sendMessage(this.currentChannelID, text)
   }
 
   private get currentChannelID(): string {
     const state = store.getState()
-    const serverID = state.servers.selectedServer!
-    return state.servers.servers[serverID].selectedChannel!
+    const teamID = state.teams.selectedTeam!
+    return state.teams.teams[teamID].selectedChannel!
   }
 
-  private get currentServer() {
+  private get currentTeam() {
     const state = store.getState()
-    const serverID = state.servers.selectedServer!
-    return this.servers[serverID]
+    const teamID = state.teams.selectedTeam!
+    return this.teams[teamID]
   }
 }
 

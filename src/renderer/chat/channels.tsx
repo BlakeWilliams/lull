@@ -35,11 +35,11 @@ class Channels extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: AppState) => {
-  const server = state.servers.servers[state.servers.selectedServer]
+  const team = state.teams.teams[state.teams.selectedTeam]
 
   return {
-    selectedChannel: server.selectedChannel,
-    channels: Object.values(server.channels),
+    selectedChannel: team.selectedChannel,
+    channels: Object.values(team.channels),
   }
 }
 

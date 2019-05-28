@@ -1,22 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Server } from '@common/types'
+import { Team } from '@common/types'
 import { AppState } from '@renderer/store'
 
 import styles from './style.scss'
 
 interface Props {
-  server: Server
+  team: Team
 }
 
 class Servers extends React.Component<Props> {
   render() {
-    const { server } = this.props
+    const { team } = this.props
 
     return (
       <div className={styles.container}>
-        <img className={styles.image} src={server.image132} />
-        <span className={styles.name}>{server.name}</span>
+        <img className={styles.image} src={team.image132} />
+        <span className={styles.name}>{team.name}</span>
       </div>
     )
   }
@@ -24,7 +24,7 @@ class Servers extends React.Component<Props> {
 
 const mapStateToProps = function(state: AppState) {
   return {
-    server: state.servers.servers[state.servers.selectedServer!],
+    team: state.teams.teams[state.teams.selectedTeam!],
   }
 }
 

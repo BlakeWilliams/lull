@@ -6,11 +6,11 @@ type State = { [key: string]: UserMap }
 export default (state: State = {}, action: AddUserAction) => {
   switch (action.type) {
     case ADD_USER:
-      const existingServerUsers = state[action.payload.serverID] || {}
+      const existingTeamUsers = state[action.payload.teamID] || {}
       return {
         ...state,
-        [action.payload.serverID]: {
-          ...existingServerUsers,
+        [action.payload.teamID]: {
+          ...existingTeamUsers,
           [action.payload.user.id]: action.payload.user,
         },
       }

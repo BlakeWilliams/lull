@@ -1,7 +1,7 @@
 import React from 'react'
 import { sortBy } from 'lodash'
 import { connect } from 'react-redux'
-import { Message, Server } from '@common/types'
+import { Message, Team } from '@common/types'
 import { AppState } from '@renderer/store'
 
 import MessageRow from './message-row'
@@ -65,8 +65,8 @@ class Messages extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: AppState) => {
-  const selectedServer = state.servers.selectedServer!
-  const selectedChannel = state.servers.servers[selectedServer].selectedChannel
+  const selectedTeam = state.teams.selectedTeam!
+  const selectedChannel = state.teams.teams[selectedTeam].selectedChannel
   const messages = state.messages[selectedChannel] || []
 
   return {

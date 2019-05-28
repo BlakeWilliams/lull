@@ -1,17 +1,17 @@
 import store from './store'
 
 import {
-  ADD_SERVER,
+  ADD_TEAM,
   ADD_CHANNEL,
-  AddServerAction,
+  AddTeamAction,
   ADD_MESSAGE,
   ADD_USER,
 } from '@common/types'
 
-export function addServer(rtmData: any, teamInfo: any) {
+export function addTeam(rtmData: any, teamInfo: any) {
   console.log(rtmData)
-  const action: AddServerAction = {
-    type: ADD_SERVER,
+  const action: AddTeamAction = {
+    type: ADD_TEAM,
     payload: {
       id: rtmData.team.id,
       name: rtmData.team.name,
@@ -28,7 +28,7 @@ export function addServer(rtmData: any, teamInfo: any) {
   store.dispatch(action)
 }
 
-export function addChannel(serverID: string, rawChannel: any) {
+export function addChannel(teamID: string, rawChannel: any) {
   if (rawChannel.is_member) {
     const channel = {
       id: rawChannel.id,
@@ -38,7 +38,7 @@ export function addChannel(serverID: string, rawChannel: any) {
     store.dispatch({
       type: ADD_CHANNEL,
       payload: {
-        serverID,
+        teamID,
         channel,
       },
     })
@@ -66,7 +66,7 @@ export function addUser(rawUser: any) {
   store.dispatch({
     type: ADD_USER,
     payload: {
-      serverID: rawUser.team_id,
+      teamID: rawUser.team_id,
       user: {
         id: rawUser.id,
         name: rawUser.name,

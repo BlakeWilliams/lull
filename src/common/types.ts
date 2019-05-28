@@ -1,4 +1,4 @@
-export const ADD_SERVER = 'ADD_SERVER'
+export const ADD_TEAM = 'ADD_TEAM'
 export const ADD_CHANNEL = 'ADD_CHANNEL'
 export const SELECT_CHANNEL = 'SELECT_CHANNEL'
 
@@ -7,21 +7,21 @@ export interface SelectChannelAction {
   payload: string
 }
 
-export interface AddServerAction {
-  type: typeof ADD_SERVER
-  payload: Server
+export interface AddTeamAction {
+  type: typeof ADD_TEAM
+  payload: Team
 }
 
 export interface AddChannelAction {
   type: typeof ADD_CHANNEL
   payload: {
-    serverID: string
+    teamID: string
     channel: Channel
   }
 }
 
 // Slack types
-export interface Server {
+export interface Team {
   id: string
   name: string
   domain: string
@@ -80,7 +80,7 @@ export interface User {
 export interface AddUserAction {
   type: typeof ADD_USER
   payload: {
-    serverID: string
+    teamID: string
     user: User
   }
 }

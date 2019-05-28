@@ -2,12 +2,12 @@ import url from 'url'
 import path from 'path'
 import { app, BrowserWindow, shell } from 'electron'
 import isElectronDev from 'electron-is-dev'
-import Server from './server'
+import TeamConnection from './team-connection'
 import SlackCommands from './slack-commands'
 
-const server = new Server(process.env.SLACK_TOKEN)
-server.connect().then(() => {
-  SlackCommands.addServer(server)
+const team = new TeamConnection(process.env.SLACK_TOKEN)
+team.connect().then(() => {
+  SlackCommands.addTeam(team)
 })
 
 let mainWindow: undefined | BrowserWindow

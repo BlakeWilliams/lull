@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Server } from '@common/types'
+import { Team } from '@common/types'
 import { AppState } from '@renderer/store'
 
 import Channels from './channels'
@@ -13,17 +13,15 @@ import NewMessage from './new-message/index'
 import styles from './index.scss'
 
 interface Props {
-  server: Server
+  team: Team
 }
 interface State {}
 
 class Chat extends React.Component<Props, State> {
   render() {
-    const { server } = this.props
+    const { team } = this.props
 
-    console.log(server)
-
-    if (server) {
+    if (team) {
       return (
         <div className={styles.main}>
           <div className={styles.channelContainer}>
@@ -44,9 +42,9 @@ class Chat extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: AppState) => {
-  const server = state.servers.servers[state.servers.selectedServer]
+  const team = state.teams.teams[state.teams.selectedTeam]
 
-  return { server }
+  return { team }
 }
 
 export default connect(mapStateToProps)(Chat)

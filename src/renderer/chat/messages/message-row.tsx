@@ -20,8 +20,8 @@ const uriRegex = new RegExp('<http.*?>', 'g')
 // TODO move to when we receive the message to cache it?
 const formatMessage = (text: string): string => {
   let inCode = false
-  const serverID = store.getState().servers.selectedServer
-  const users = store.getState().users[serverID]
+  const teamID = store.getState().teams.selectedTeam
+  const users = store.getState().users[teamID]
 
   return text
     .split('\n')
@@ -108,11 +108,11 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
 }
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
-  const serverID = state.servers.selectedServer
+  const teamID = state.teams.selectedTeam
   const userID = ownProps.message.userID
 
   return {
-    user: state.users[serverID][userID],
+    user: state.users[teamID][userID],
   }
 }
 
