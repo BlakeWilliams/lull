@@ -47,6 +47,7 @@ export interface Message {
   text: string
   userID: string
   timestamp: Date
+  subtype?: string
 }
 
 export interface AddMessageAction {

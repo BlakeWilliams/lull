@@ -22,10 +22,6 @@
   border-top: none;
 }
 
-.sameOwner {
-  color: #f0f;
-}
-
 .imgContainer {
   flex: 0 0 42px;
   max-height: 42px;
@@ -51,6 +47,41 @@
 .text {
   color: rgb(240, 240, 250);
   word-wrap: break-word;
+
+  a {
+    color: rgb(240, 240, 250);
+    font-weight: bold;
+  }
+
+  code {
+    display: block;
+    background-color: lighten($background-color, 4);
+    color: #fefefe;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid lighten($background-color, 10);
+    width: 100%;
+
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+
+      div {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.inline {
+  color: #59b5fb;
+  display: inline !important;
+  padding: 4px !important;
+}
+
+.user {
+  color: #fefefe;
+  font-weight: bold;
 }
 
 .text + .text {

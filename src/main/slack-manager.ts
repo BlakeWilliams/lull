@@ -50,6 +50,7 @@ export function addMessage(channelID: string, rawMessage: any) {
     id: channelID + rawMessage.ts,
     text: rawMessage.text,
     userID: rawMessage.user,
+    subtype: rawMessage.subtype,
     timestamp: new Date(rawMessage.ts * 1000),
   }
   store.dispatch({
