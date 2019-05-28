@@ -12,7 +12,7 @@
   display: flex;
   padding: 6px 14px;
   border-top: 1px solid lighten($background-color, 5);
-  word-break: break-all;
+  word-break: break-word;
 
   &:first-child {
     border-top: none;

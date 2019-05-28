@@ -30,13 +30,15 @@ export interface Team {
     id: string
     name: string
   }
-  channels: Channel[]
+  channels: { [key: string]: Channel[] }
 }
 
 export interface Channel {
   id: string
   name: string
   isChannel: boolean
+  topic: string
+  lastRead?: Date
 }
 
 export const ADD_MESSAGE = 'ADD_MESSAGE'

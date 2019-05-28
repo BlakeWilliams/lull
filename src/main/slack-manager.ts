@@ -6,7 +6,9 @@ import {
   AddTeamAction,
   ADD_MESSAGE,
   ADD_USER,
+  Channel,
 } from '@common/types'
+import TeamConnection from './team-connection'
 
 export function addTeam(rtmData: any, teamInfo: any) {
   console.log(rtmData)
@@ -17,7 +19,7 @@ export function addTeam(rtmData: any, teamInfo: any) {
       name: rtmData.team.name,
       domain: rtmData.team.domain,
       image132: teamInfo.icon.image_132,
-      channels: [],
+      channels: {},
       self: {
         id: rtmData.self.id,
         name: rtmData.self.name,
@@ -28,17 +30,28 @@ export function addTeam(rtmData: any, teamInfo: any) {
   store.dispatch(action)
 }
 
-export function addChannel(teamID: string, rawChannel: any) {
+export async function addChannel(
+  teamConnection: TeamConnection,
+  rawChannel: any,
+) {
+  const channel: Channel = {
+    id: rawChannel.id,
+    name: rawChannel.name,
+    topic: rawChannel.topic.value,
+    isChannel: rawChannel.is_channel || true,
+  }
+
   if (rawChannel.is_member) {
-    const channel = {
-      id: rawChannel.id,
-      name: rawChannel.name,
-      isChannel: rawChannel.is_channel || true,
-    }
+    const info = await teamConnection.webClient.channels.info({
+      channel: channel.id,
+    })
+
+    channel.lastRead = new Date(info.channel.last_read * 1000)
+
     store.dispatch({
       type: ADD_CHANNEL,
       payload: {
-        teamID,
+        teamID: teamConnection.id,
         channel,
       },
     })

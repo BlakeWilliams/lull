@@ -55,7 +55,7 @@ class TeamConnection {
 
   private async fetchChannels() {
     const channelResponse = await this.webClient.channels.list()
-    channelResponse.channels.forEach((data: any) => addChannel(this.id, data))
+    channelResponse.channels.forEach((data: any) => addChannel(this, data))
   }
 
   private async fetchUsers() {
@@ -80,12 +80,8 @@ class TeamConnection {
     // TODO handle most of these events https://api.slack.com/rtm
 
     this.rtm.on('message', (data: any) => addMessage(data.channel, data))
-    this.rtm.on('channel_joined', (data: any) =>
-      addChannel(this.id, data.channel),
-    )
-    this.rtm.on('channel_rename', (data: any) =>
-      addChannel(this.id, data.channel),
-    )
+    this.rtm.on('channel_joined', (data: any) => addChannel(this, data.channel))
+    this.rtm.on('channel_rename', (data: any) => addChannel(this, data.channel))
   }
 }
 
