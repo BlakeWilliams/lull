@@ -13,19 +13,27 @@ interface State {
 }
 
 class NewMessage extends React.Component<Props, State> {
+  textarea = React.createRef<HTMLTextAreaElement>()
+
   state = {
     inputValue: '',
   }
 
-  handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  handleKeyUp = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.keyCode === 13 && !event.shiftKey) {
       this.props.sendMessage(this.state.inputValue)
       this.setState({ inputValue: '' })
     }
   }
 
-  handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+  handleChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     this.setState({ inputValue: event.currentTarget.value })
+  }
+
+  handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    const textarea = this.textarea.current
+    textarea.style.height = 'auto'
+    textarea.style.height = textarea.scrollHeight + 'px'
   }
 
   render() {
@@ -33,12 +41,15 @@ class NewMessage extends React.Component<Props, State> {
 
     return (
       <div className={styles.container}>
-        <input
+        <textarea
+          ref={this.textarea}
+          onInput={this.handleInput}
           onKeyUp={this.handleKeyUp}
           className={styles.input}
           placeholder="Message"
           onChange={this.handleChange}
           value={inputValue}
+          rows={1}
         />
       </div>
     )

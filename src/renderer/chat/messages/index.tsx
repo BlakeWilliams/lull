@@ -47,7 +47,7 @@ class Messages extends React.Component<Props> {
 
     return (
       <div className={styles.container} ref={this.scrollWindow}>
-        {messages.map(message => {
+        {messages.map((message, index) => {
           let previousOwner = owner
           owner = message.userID
 
