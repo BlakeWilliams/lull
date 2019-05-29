@@ -64,6 +64,10 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
   render() {
     const { consecutiveOwner, message, user } = this.props
 
+    if (!message || !message.text) {
+      return null
+    }
+
     const name = user.displayName || user.name || user.realName
 
     if (message.subtype === 'channel_join') {

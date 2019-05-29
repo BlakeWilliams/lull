@@ -16,6 +16,7 @@
   margin-bottom: 4px;
   padding: 0 6px;
   cursor: default;
+  display: flex;
 }
 
 .unreadChannel {
@@ -25,4 +26,12 @@
 .selectedChannel {
   background-color: rgb(70, 70, 70);
   color: #fff;
+}
+
+.channelText {
+  flex: 1;
+}
+
+.unread {
+  align-self: flex-end;
 }

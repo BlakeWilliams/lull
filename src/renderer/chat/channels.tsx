@@ -4,6 +4,7 @@ import { Channel } from '@common/types'
 import { selectChannel } from '@renderer/actions'
 import { AppState } from '@renderer/store'
 
+import ChannelEntry from './channels/channel-entry'
 import styles from './channels.scss'
 
 interface Props {
@@ -19,15 +20,12 @@ class Channels extends React.Component<Props> {
     return (
       <div className={styles.channels}>
         {channels.map(channel => (
-          <span
-            onClick={() => selectChannel(channel.id)}
+          <ChannelEntry
             key={channel.id}
-            className={`${styles.channel} ${
-              channel.id === selectedChannel ? styles.selectedChannel : null
-            }`}
-          >
-            #{channel.name}
-          </span>
+            isSelected={channel.id == selectedChannel}
+            channel={channel}
+            selectChannel={selectChannel}
+          />
         ))}
       </div>
     )
@@ -36,10 +34,13 @@ class Channels extends React.Component<Props> {
 
 const mapStateToProps = (state: AppState) => {
   const team = state.teams.teams[state.teams.selectedTeam]
+  const joinedChannels = Object.values(team.channels).filter(
+    (channel: Channel) => channel.isMember,
+  )
 
   return {
     selectedChannel: team.selectedChannel,
-    channels: Object.values(team.channels),
+    channels: joinedChannels,
   }
 }
 

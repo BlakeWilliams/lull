@@ -67,7 +67,7 @@ class Messages extends React.Component<Props> {
 const mapStateToProps = (state: AppState) => {
   const selectedTeam = state.teams.selectedTeam!
   const selectedChannel = state.teams.teams[selectedTeam].selectedChannel
-  const messages = state.messages[selectedChannel] || []
+  const messages = Object.values(state.messages[selectedChannel] || {}) || []
 
   return {
     messages: sortBy(messages, 'timestamp'),

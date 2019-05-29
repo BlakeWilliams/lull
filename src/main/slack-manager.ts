@@ -34,28 +34,28 @@ export async function addChannel(
   teamConnection: TeamConnection,
   rawChannel: any,
 ) {
+  const info = await teamConnection.webClient.channels.info({
+    channel: rawChannel.id,
+  })
+
   const channel: Channel = {
     id: rawChannel.id,
-    name: rawChannel.name,
-    topic: rawChannel.topic.value,
-    isChannel: rawChannel.is_channel || true,
+    name: info.channel.name,
+    topic: info.channel.topic.value,
+    isChannel: info.channel.is_channel,
+    isMember: info.channel.is_member,
+    isPrivate: info.channel.is_private,
+    unreadCount: info.channel.unread_count,
+    lastRead: new Date(info.channel.last_read * 1000),
   }
 
-  if (rawChannel.is_member) {
-    const info = await teamConnection.webClient.channels.info({
-      channel: channel.id,
-    })
-
-    channel.lastRead = new Date(info.channel.last_read * 1000)
-
-    store.dispatch({
-      type: ADD_CHANNEL,
-      payload: {
-        teamID: teamConnection.id,
-        channel,
-      },
-    })
-  }
+  store.dispatch({
+    type: ADD_CHANNEL,
+    payload: {
+      teamID: teamConnection.id,
+      channel,
+    },
+  })
 }
 
 export function addMessage(channelID: string, rawMessage: any) {
@@ -64,6 +64,7 @@ export function addMessage(channelID: string, rawMessage: any) {
     text: rawMessage.text,
     userID: rawMessage.user,
     subtype: rawMessage.subtype,
+    ts: rawMessage.ts,
     timestamp: new Date(rawMessage.ts * 1000),
   }
   store.dispatch({

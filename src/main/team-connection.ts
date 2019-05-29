@@ -79,9 +79,18 @@ class TeamConnection {
   private addHandlers() {
     // TODO handle most of these events https://api.slack.com/rtm
 
-    this.rtm.on('message', (data: any) => addMessage(data.channel, data))
+    this.rtm.on('message', (data: any) => {
+      switch (data.subtype) {
+        case 'message_changed':
+          addMessage(data.channel, data.message)
+        default:
+          addMessage(data.channel, data)
+      }
+    })
     this.rtm.on('channel_joined', (data: any) => addChannel(this, data.channel))
-    this.rtm.on('channel_rename', (data: any) => addChannel(this, data.channel))
+    this.rtm.on('channel_rename', (data: any) => {
+      addChannel(this, data.channel)
+    })
   }
 }
 
