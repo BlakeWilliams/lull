@@ -1,7 +1,7 @@
 @import 'variables';
 
 .container {
-  background-color: $background-color;
+  background-color: rgb(50, 50, 50);
   color: #fff;
   height: 100%;
   max-width: 100%;
@@ -10,35 +10,36 @@
 
 .messageRow {
   display: flex;
-  padding: 6px 14px;
-  border-top: 1px solid lighten($background-color, 5);
+  padding: 0 28px;
+  margin-bottom: 10px;
   word-break: break-word;
+  border-radius: 4px;
 
   &:first-child {
+    margin-top: none;
     border-top: none;
   }
-}
-
-.messageRow + .sameOwner {
-  border-top: none;
 }
 
 .imgContainer {
   flex: 0 0 42px;
   max-height: 42px;
-  margin-right: 7px;
+  margin-right: 14px;
 
   img {
     width: 42px;
     height: 42px;
-    margin-top: 2px;
-    border-radius: 50%;
+    margin-top: 4px;
+    border-radius: 8px;
   }
 }
 
 .textContainer {
+  // background-color: rgb(60, 60, 60);
+  // padding: 14px 18px;
   display: flex;
   flex-direction: column;
+  border-radius: 6px;
 }
 
 .name {
@@ -52,6 +53,11 @@
   a {
     color: rgb(240, 240, 250);
     font-weight: bold;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 0.6em;
   }
 
   code {

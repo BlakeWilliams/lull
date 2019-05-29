@@ -1,8 +1,7 @@
 @import 'variables';
 
 .container {
-  border-right: 1px solid $border-color;
-  border-bottom: 1px solid lighten($border-color, 20);
+  background-color: rgb(42, 42, 42);
   padding: 8px 14px;
   display: flex;
   align-items: center;

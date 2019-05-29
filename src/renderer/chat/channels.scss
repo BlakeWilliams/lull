@@ -1,22 +1,28 @@
 @import 'variables';
 
 .channels {
-  background-color: $sidebar-background-color;
-  border-right: 1px solid $border-color;
+  background-color: rgb(42, 42, 42);
   height: 100%;
   min-width: 245px;
   overflow-y: scroll;
+  padding: 6px 14px;
   user-select: none;
 }
 
 .channel {
-  color: #eee;
+  color: #aaa;
+  border-radius: 4px;
   display: block;
-  padding: 6px 14px;
+  margin-bottom: 4px;
+  padding: 0 6px;
   cursor: default;
 }
 
+.unreadChannel {
+  color: #eee;
+}
+
 .selectedChannel {
-  background-color: $sidebar-selected-color;
+  background-color: rgb(70, 70, 70);
   color: #fff;
 }

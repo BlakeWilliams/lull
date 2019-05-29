@@ -55,7 +55,7 @@ class Messages extends React.Component<Props> {
             <MessageRow
               key={message.id}
               message={message}
-              sameOwnerAsPreviousMessage={owner === previousOwner}
+              consecutiveOwner={owner === previousOwner}
             />
           )
         })}

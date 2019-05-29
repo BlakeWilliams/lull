@@ -8,7 +8,7 @@ import store from '@renderer/store'
 import styles from './style.scss'
 
 interface OwnProps {
-  sameOwnerAsPreviousMessage: boolean
+  consecutiveOwner: boolean
   message: Message
 }
 
@@ -35,27 +35,26 @@ const formatMessage = (text: string): string => {
       } else if (inCode) {
         return `<div>${row}</div>`
       } else {
-        return (
-          row
-            // .replace(/`.*?`/g, function(match: string) {
-            //   return `<code class="${
-            //     styles.inline
-            //   }">${match.substr(1, match.length - 2)}</code>`
-            // })
-            .replace(/<@.*?>/g, function(match: string) {
-              const user = users[match.substr(2, match.length - 3)]
-              return `<span class="${
-                styles.user
-              }">@${user.displayName || user.realName || user.name || 'unknown'}</span>`
-            })
-            .replace(uriRegex, function(match: string) {
-              const [text, label]: string[] = match
-                .substr(1, match.length - 2)
-                .split('|')
+        const formattedRow = row
+          .replace(/`.*?`/g, function(match: string) {
+            return `<code class="${
+              styles.inline
+            }">${match.substr(1, match.length - 2)}</code>`
+          })
+          .replace(/<@.*?>/g, function(match: string) {
+            const user = users[match.substr(2, match.length - 3)]
+            return `<span class="${
+              styles.user
+            }">@${user.displayName || user.realName || user.name || 'unknown'}</span>`
+          })
+          .replace(uriRegex, function(match: string) {
+            const [text, label]: string[] = match
+              .substr(1, match.length - 2)
+              .split('|')
 
-              return `<a href="${text}" target="_blank">${label || text}</a>`
-            })
-        )
+            return `<a href="${text}" target="_blank">${label || text}</a>`
+          })
+        return `<p>${formattedRow}</p>`
       }
     })
     .join('')
@@ -63,7 +62,8 @@ const formatMessage = (text: string): string => {
 
 class MessageRow extends React.Component<OwnProps & DispatchProps> {
   render() {
-    const { message, sameOwnerAsPreviousMessage, user } = this.props
+    const { consecutiveOwner, message, user } = this.props
+
     const name = user.displayName || user.name || user.realName
 
     if (message.subtype === 'channel_join') {
@@ -82,24 +82,21 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
       )
     } else {
       return (
-        <div
-          className={`${styles.messageRow} ${
-            sameOwnerAsPreviousMessage ? styles.sameOwner : ''
-          }`}
-        >
+        <div className={styles.messageRow}>
           <div className={styles.imgContainer}>
-            {sameOwnerAsPreviousMessage ? null : <img src={user.image72} />}
+            {!consecutiveOwner && <img src={user.image72} />}
           </div>
 
-          <div className={styles.textContainer}>
-            {sameOwnerAsPreviousMessage ? null : (
-              <span className={styles.name}>{name}</span>
-            )}
-
-            <span
-              className={styles.text}
-              dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }}
-            />
+          <div>
+            {!consecutiveOwner && <span className={styles.name}>{name}</span>}
+            <div className={styles.textContainer}>
+              <span
+                className={styles.text}
+                dangerouslySetInnerHTML={{
+                  __html: formatMessage(message.text),
+                }}
+              />
+            </div>
           </div>
         </div>
       )
