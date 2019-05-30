@@ -1,13 +1,15 @@
 import React from 'react'
 import { sortBy } from 'lodash'
 import { connect } from 'react-redux'
-import { Message, Team } from '@common/types'
+import { Message, Team, Channel } from '@common/types'
 import { AppState } from '@renderer/store'
 
 import MessageRow from './message-row'
 import styles from './style.scss'
+import { sendReadMarker, fetchMessages } from '@renderer/slack-commands'
 
 interface Props {
+  channel: Channel
   messages: Message[]
 }
 
@@ -26,12 +28,22 @@ class Messages extends React.Component<Props> {
 
   componentDidUpdate() {
     if (this.atScrollBottom) {
+      this.updateReadStatus()
       this.scrollToBottom()
     }
   }
 
   componentDidMount() {
+    this.updateReadStatus()
     this.scrollToBottom()
+  }
+
+  updateReadStatus() {
+    const { channel } = this.props
+
+    if (channel && channel.unreadCount > 0) {
+      sendReadMarker(channel.id)
+    }
   }
 
   getSnapshotBeforeUpdate(): any {
@@ -70,6 +82,7 @@ const mapStateToProps = (state: AppState) => {
   const messages = Object.values(state.messages[selectedChannel] || {}) || []
 
   return {
+    channel: state.channels[selectedTeam][selectedChannel],
     messages: sortBy(messages, 'timestamp'),
   }
 }

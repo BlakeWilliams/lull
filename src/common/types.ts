@@ -1,6 +1,15 @@
 export const ADD_TEAM = 'ADD_TEAM'
 export const ADD_CHANNEL = 'ADD_CHANNEL'
 export const SELECT_CHANNEL = 'SELECT_CHANNEL'
+export const RESET_UNREADS = 'RESET_UNREADS'
+
+export interface ResetUnreads {
+  type: typeof RESET_UNREADS
+  payload: {
+    channelID: string
+    teamID: string
+  }
+}
 
 export interface SelectChannelAction {
   type: typeof SELECT_CHANNEL
@@ -59,6 +68,7 @@ export interface Message {
 export interface AddMessageAction {
   type: typeof ADD_MESSAGE
   payload: {
+    teamID: string
     channelID: string
     message: Message
   }

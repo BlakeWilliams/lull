@@ -33,10 +33,11 @@ class Channels extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: AppState) => {
+  const selectedTeam = state.teams.selectedTeam
   const team = state.teams.teams[state.teams.selectedTeam]
-  const joinedChannels = Object.values(team.channels).filter(
-    (channel: Channel) => channel.isMember,
-  )
+  const joinedChannels = Object.values(
+    state.channels[selectedTeam] || [],
+  ).filter((channel: Channel) => channel.isMember)
 
   return {
     selectedChannel: team.selectedChannel,

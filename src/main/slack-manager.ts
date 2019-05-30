@@ -43,7 +43,7 @@ export async function addChannel(
     name: info.channel.name,
     topic: info.channel.topic.value,
     isChannel: info.channel.is_channel,
-    isMember: info.channel.is_member,
+    isMember: info.channel.is_member || info.channel.is_general,
     isPrivate: info.channel.is_private,
     unreadCount: info.channel.unread_count,
     lastRead: new Date(info.channel.last_read * 1000),
@@ -58,7 +58,7 @@ export async function addChannel(
   })
 }
 
-export function addMessage(channelID: string, rawMessage: any) {
+export function addMessage(teamID: string, channelID: string, rawMessage: any) {
   const message = {
     id: channelID + rawMessage.ts,
     text: rawMessage.text,
@@ -70,6 +70,7 @@ export function addMessage(channelID: string, rawMessage: any) {
   store.dispatch({
     type: ADD_MESSAGE,
     payload: {
+      teamID,
       channelID,
       message,
     },

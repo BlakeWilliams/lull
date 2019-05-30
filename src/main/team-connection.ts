@@ -35,7 +35,7 @@ class TeamConnection {
     const sendResult = await this.rtm.sendMessage(text, channelID)
 
     // has to be formatted as if slack provided the message
-    addMessage(channelID, {
+    addMessage(this.id, channelID, {
       text: text,
       user: this.userID,
       ts: sendResult.ts,
@@ -54,8 +54,34 @@ class TeamConnection {
   }
 
   private async fetchChannels() {
-    const channelResponse = await this.webClient.channels.list()
-    channelResponse.channels.forEach((data: any) => addChannel(this, data))
+    let channelResponse = await this.webClient.channels.list()
+
+    let isPaginating = true
+
+    while (isPaginating) {
+      channelResponse.channels.forEach(async (data: any) => {
+        addChannel(this, data)
+
+        if (data.is_member) {
+          const history = await this.webClient.channels.history({
+            channel: data.id,
+          })
+
+          history.messages.forEach((rawMessage: any) => {
+            addMessage(this.id, data.id, rawMessage)
+          })
+        }
+
+        if (channelResponse.response_metadata.next_cursor) {
+          channelResponse = await this.webClient.channels.list({
+            cursor: channelResponse.response_metadata.next_cursor,
+          })
+          isPaginating = true
+        } else {
+          isPaginating = false
+        }
+      })
+    }
   }
 
   private async fetchUsers() {
@@ -80,11 +106,14 @@ class TeamConnection {
     // TODO handle most of these events https://api.slack.com/rtm
 
     this.rtm.on('message', (data: any) => {
+      console.log('MESSAGE EVENT', data)
       switch (data.subtype) {
         case 'message_changed':
-          addMessage(data.channel, data.message)
+          addMessage(this.id, data.channel, data.message)
         default:
-          addMessage(data.channel, data)
+          if (data.text) {
+            addMessage(this.id, data.channel, data)
+          }
       }
     })
     this.rtm.on('channel_joined', (data: any) => addChannel(this, data.channel))

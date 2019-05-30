@@ -1,7 +1,4 @@
-import {
-  fetchMessages,
-  sendMessage as sendRtmMessage,
-} from '@renderer/slack-commands'
+import { sendMessage as sendRtmMessage } from '@renderer/slack-commands'
 
 import {
   SEND_MESSAGE,
@@ -10,8 +7,6 @@ import {
 } from '@common/types'
 
 export function selectChannel(id: string): SelectChannelAction {
-  fetchMessages(id)
-
   return {
     type: SELECT_CHANNEL,
     payload: id,

@@ -1,11 +1,9 @@
 import {
-  ADD_CHANNEL,
   ADD_TEAM,
   AddChannelAction,
   AddTeamAction,
-  Channel,
-  SELECT_CHANNEL,
   SelectChannelAction,
+  SELECT_CHANNEL,
   Team,
 } from '../types'
 
@@ -30,22 +28,7 @@ export default (
         teams: {
           ...state.teams,
           [action.payload.id]: {
-            selectedChannel: undefined,
             ...action.payload,
-          },
-        },
-      }
-    case ADD_CHANNEL:
-      return {
-        ...state,
-        teams: {
-          ...state.teams,
-          [action.payload.teamID]: {
-            ...state.teams[action.payload.teamID],
-            channels: {
-              ...state.teams[action.payload.teamID].channels,
-              [action.payload.channel.id]: action.payload.channel,
-            },
           },
         },
       }

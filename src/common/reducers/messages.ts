@@ -7,23 +7,12 @@ export default (state: State = {}, action: AddMessageAction) => {
     case ADD_MESSAGE:
       const existingMessages = state[action.payload.channelID] || {}
 
-      console.log('ADDDING', action)
       return {
         ...state,
         [action.payload.channelID]: {
           ...existingMessages,
           [action.payload.message.ts]: {
             ...(existingMessages[action.payload.message.ts] || {}),
-            ...action.payload.message,
-          },
-        },
-      }
-
-      return {
-        ...state,
-        [action.payload.channelID]: {
-          ...existingMessages,
-          [action.payload.message.ts]: {
             ...action.payload.message,
           },
         },
