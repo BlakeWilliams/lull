@@ -34,19 +34,28 @@ export async function addChannel(
   teamConnection: TeamConnection,
   rawChannel: any,
 ) {
-  const info = await teamConnection.webClient.channels.info({
-    channel: rawChannel.id,
-  })
-
   const channel: Channel = {
     id: rawChannel.id,
-    name: info.channel.name,
-    topic: info.channel.topic.value,
-    isChannel: info.channel.is_channel,
-    isMember: info.channel.is_member || info.channel.is_general,
-    isPrivate: info.channel.is_private,
-    unreadCount: info.channel.unread_count,
-    lastRead: new Date(info.channel.last_read * 1000),
+    name: rawChannel.name,
+    isChannel: rawChannel.is_channel,
+    isGroup: rawChannel.is_group,
+    isIM: rawChannel.is_im,
+    isMember: rawChannel.is_member || rawChannel.isIM,
+    isPrivate: rawChannel.is_private,
+    lastRead: new Date(rawChannel.last_read * 1000),
+  }
+
+  if (channel.isChannel || (channel.isGroup && !channel.isIM)) {
+    try {
+      const info = await teamConnection.webClient.conversations.info({
+        channel: rawChannel.id,
+      })
+      channel.topic = info.channel.topic.value
+      channel.unreadCount = info.channel.unread_count
+    } catch {
+      console.log(rawChannel)
+      console.log('info failed')
+    }
   }
 
   store.dispatch({
@@ -58,7 +67,12 @@ export async function addChannel(
   })
 }
 
-export function addMessage(teamID: string, channelID: string, rawMessage: any) {
+export function addMessage(
+  teamID: string,
+  channelID: string,
+  rawMessage: any,
+  isNew: boolean,
+) {
   const message = {
     id: channelID + rawMessage.ts,
     text: rawMessage.text,

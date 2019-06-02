@@ -46,11 +46,13 @@ export interface Channel {
   id: string
   name: string
   isChannel: boolean
-  topic: string
+  isGroup: boolean
+  isIM: boolean
+  topic?: string
   lastRead?: Date
   isMember: boolean
   isPrivate: boolean
-  unreadCount: number
+  unreadCount?: number
 }
 
 export const ADD_MESSAGE = 'ADD_MESSAGE'

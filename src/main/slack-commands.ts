@@ -24,7 +24,7 @@ class SlackCommands {
     })
 
     history.messages.forEach((rawMessage: any) => {
-      addMessage(this.currentTeam.id, channelID, rawMessage)
+      addMessage(this.currentTeam.id, channelID, rawMessage, false)
     })
   }
 

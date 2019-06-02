@@ -64,7 +64,7 @@ const formatMessage = (text: string): string => {
 
 class MessageRow extends React.Component<OwnProps & DispatchProps> {
   render() {
-    const { consecutiveOwner, message, user } = this.props
+    const { consecutiveOwner, hasThread, message, user } = this.props
 
     if (!message || !message.text) {
       return null

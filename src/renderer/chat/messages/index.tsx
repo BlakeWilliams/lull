@@ -82,7 +82,7 @@ const mapStateToProps = (state: AppState) => {
   const messages = Object.values(state.messages[selectedChannel] || {}) || []
 
   return {
-    channel: state.channels[selectedTeam][selectedChannel],
+    channel: (state.conversations[selectedTeam] || {})[selectedChannel],
     messages: sortBy(messages, 'timestamp'),
   }
 }

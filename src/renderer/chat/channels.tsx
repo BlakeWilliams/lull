@@ -36,8 +36,8 @@ const mapStateToProps = (state: AppState) => {
   const selectedTeam = state.teams.selectedTeam
   const team = state.teams.teams[state.teams.selectedTeam]
   const joinedChannels = Object.values(
-    state.channels[selectedTeam] || [],
-  ).filter((channel: Channel) => channel.isMember)
+    state.conversations[selectedTeam] || [],
+  ).filter((channel: Channel) => channel.isChannel && channel.isMember)
 
   return {
     selectedChannel: team.selectedChannel,

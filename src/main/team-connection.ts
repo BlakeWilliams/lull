@@ -35,11 +35,16 @@ class TeamConnection {
     const sendResult = await this.rtm.sendMessage(text, channelID)
 
     // has to be formatted as if slack provided the message
-    addMessage(this.id, channelID, {
-      text: text,
-      user: this.userID,
-      ts: sendResult.ts,
-    })
+    addMessage(
+      this.id,
+      channelID,
+      {
+        text: text,
+        user: this.userID,
+        ts: sendResult.ts,
+      },
+      true,
+    )
     return sendResult.ts
   }
 
@@ -54,7 +59,9 @@ class TeamConnection {
   }
 
   private async fetchChannels() {
-    let channelResponse = await this.webClient.channels.list()
+    let channelResponse = await this.webClient.conversations.list({
+      types: 'public_channel,private_channel,im,mpim',
+    })
 
     let isPaginating = true
 
@@ -63,13 +70,28 @@ class TeamConnection {
         addChannel(this, data)
 
         if (data.is_member) {
-          const history = await this.webClient.channels.history({
-            channel: data.id,
-          })
+          try {
+            if (data.is_mpim) {
+              const history = await this.webClient.mpims.history({
+                channel: data.id,
+              })
 
-          history.messages.forEach((rawMessage: any) => {
-            addMessage(this.id, data.id, rawMessage)
-          })
+              history.messages.forEach((rawMessage: any) => {
+                addMessage(this.id, data.id, rawMessage, false)
+              })
+            } else {
+              const history = await this.webClient.channels.history({
+                channel: data.id,
+              })
+
+              history.messages.forEach((rawMessage: any) => {
+                addMessage(this.id, data.id, rawMessage, false)
+              })
+            }
+          } catch {
+            console.log('Could not get history for', data.name)
+            console.log(data)
+          }
         }
 
         if (channelResponse.response_metadata.next_cursor) {
@@ -109,10 +131,10 @@ class TeamConnection {
       console.log('MESSAGE EVENT', data)
       switch (data.subtype) {
         case 'message_changed':
-          addMessage(this.id, data.channel, data.message)
+          addMessage(this.id, data.channel, data.message, true)
         default:
           if (data.text) {
-            addMessage(this.id, data.channel, data)
+            addMessage(this.id, data.channel, data, true)
           }
       }
     })
