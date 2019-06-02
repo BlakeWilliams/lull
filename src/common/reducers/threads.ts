@@ -8,17 +8,12 @@ export default createReducer<State>(
   {
     [ADD_MESSAGE]: (state: State, action: AddMessageAction) => {
       const { channelID, message } = action.payload
+      const parentID = channelID + message.threadTS
 
       if (message.threadTS && message.threadTS != message.ts) {
-        if (state[channelID] && state[channelID][message.threadTS]) {
-          const existingCount =
-            state[channelID][message.threadTS].threadCount || 0
-          state[channelID][message.threadTS].threadCount = existingCount + 1
-        }
-      } else {
-        state[channelID] = state[channelID] || {}
-        state[channelID][message.ts] = {
-          ...(state[channelID][message.ts] || {}),
+        state[parentID] = state[parentID] || {}
+        state[parentID][message.ts] = {
+          ...(state[parentID][message.ts] || {}),
           ...message,
         }
       }

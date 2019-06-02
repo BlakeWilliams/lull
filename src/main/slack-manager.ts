@@ -66,6 +66,7 @@ export function addMessage(teamID: string, channelID: string, rawMessage: any) {
     subtype: rawMessage.subtype,
     ts: rawMessage.ts,
     timestamp: new Date(rawMessage.ts * 1000),
+    threadTS: rawMessage.thread_ts,
   }
   store.dispatch({
     type: ADD_MESSAGE,

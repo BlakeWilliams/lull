@@ -63,6 +63,8 @@ export interface Message {
   ts: string
   timestamp: Date
   subtype?: string
+  threadTS?: string
+  threadCount: number
 }
 
 export interface AddMessageAction {

@@ -6,6 +6,7 @@ import { AppState } from '@renderer/store'
 import store from '@renderer/store'
 
 import styles from './style.scss'
+import threads from '@common/reducers/threads'
 
 interface OwnProps {
   consecutiveOwner: boolean
@@ -14,6 +15,7 @@ interface OwnProps {
 
 interface DispatchProps {
   user: User
+  hasThread: boolean
 }
 const uriRegex = new RegExp('<http.*?>', 'g')
 
@@ -101,6 +103,7 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
                 }}
               />
             </div>
+            {hasThread && false && <span>View Thread</span>}
           </div>
         </div>
       )
@@ -110,10 +113,16 @@ class MessageRow extends React.Component<OwnProps & DispatchProps> {
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
   const teamID = state.teams.selectedTeam
+  const team = state.teams.teams[teamID]
   const userID = ownProps.message.userID
+  const user: User = state.users[teamID][userID]
 
   return {
-    user: state.users[teamID][userID],
+    user,
+    hasThread:
+      Object.keys(
+        state.threads[team.selectedChannel + ownProps.message.ts] || {},
+      ).length > 0,
   }
 }
 
