@@ -1,5 +1,6 @@
 export const ADD_TEAM = 'ADD_TEAM'
 export const ADD_CHANNEL = 'ADD_CHANNEL'
+export const SELECT_TEAM = 'SELECT_TEAM'
 export const SELECT_CHANNEL = 'SELECT_CHANNEL'
 export const RESET_UNREADS = 'RESET_UNREADS'
 
@@ -13,6 +14,11 @@ export interface ResetUnreads {
 
 export interface SelectChannelAction {
   type: typeof SELECT_CHANNEL
+  payload: string
+}
+
+export interface SelectTeamAction {
+  type: typeof SELECT_TEAM
   payload: string
 }
 

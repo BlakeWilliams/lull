@@ -5,6 +5,8 @@ import {
   SelectChannelAction,
   SELECT_CHANNEL,
   Team,
+  SELECT_TEAM,
+  SelectTeamAction,
 } from '../types'
 
 export interface SelectedChannelTeam extends Team {
@@ -18,9 +20,18 @@ interface TeamState {
 
 export default (
   state: TeamState = { teams: {} },
-  action: AddTeamAction | AddChannelAction | SelectChannelAction,
+  action:
+    | AddTeamAction
+    | AddChannelAction
+    | SelectChannelAction
+    | SelectTeamAction,
 ) => {
   switch (action.type) {
+    case SELECT_TEAM:
+      return {
+        ...state,
+        selectedTeam: action.payload,
+      }
     case ADD_TEAM:
       return {
         ...state,

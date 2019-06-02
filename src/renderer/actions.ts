@@ -4,7 +4,17 @@ import {
   SEND_MESSAGE,
   SELECT_CHANNEL,
   SelectChannelAction,
+  SELECT_TEAM,
+  SelectTeamAction,
 } from '@common/types'
+
+export function selectTeam(id: string): SelectTeamAction {
+  console.log('selecting team', id)
+  return {
+    type: SELECT_TEAM,
+    payload: id,
+  }
+}
 
 export function selectChannel(id: string): SelectChannelAction {
   return {
