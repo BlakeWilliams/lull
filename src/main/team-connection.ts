@@ -72,7 +72,7 @@ class TeamConnection {
         if (data.is_member) {
           try {
             if (data.is_mpim) {
-              const history = await this.webClient.mpims.history({
+              const history = await this.webClient.conversations.history({
                 channel: data.id,
               })
 
@@ -88,9 +88,8 @@ class TeamConnection {
                 addMessage(this.id, data.id, rawMessage, false)
               })
             }
-          } catch {
-            console.log('Could not get history for', data.name)
-            console.log(data)
+          } catch (e) {
+            console.log(e)
           }
         }
 

@@ -11,7 +11,6 @@ import {
 import TeamConnection from './team-connection'
 
 export function addTeam(rtmData: any, teamInfo: any) {
-  console.log(rtmData)
   const action: AddTeamAction = {
     type: ADD_TEAM,
     payload: {
@@ -53,8 +52,7 @@ export async function addChannel(
       channel.topic = info.channel.topic.value
       channel.unreadCount = info.channel.unread_count
     } catch {
-      console.log(rawChannel)
-      console.log('info failed')
+      console.log('info failed for', channel.id, channel.name)
     }
   }
 
