@@ -10,9 +10,10 @@ A Slack client featuring minimalism and a focused feature set.
 - `@here`s and `@everyone`s are highlighted but do not create a notification
 - No call support. Use an alternative like Zoom or Meet
 - Channel history doesn't infinite scroll.
+- Edited messages aren't displayed differently
 
 ## Coming Soon™
 
-- Multiple server support + login via OAuth
 - Emoji and Reactions
 - Threading support
+- Notifications
