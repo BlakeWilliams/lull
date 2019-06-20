@@ -1,8 +1,10 @@
 import { RTMClient } from '@slack/rtm-api'
 import { addChannel, addMessage, addTeam, addUser } from './slack-manager'
+import Logger from '@main/logger'
 
 class TeamConnection {
   id: string
+  name?: string
   userID: string
   token: string
   rtm: RTMClient
@@ -12,10 +14,14 @@ class TeamConnection {
   }
 
   public async connect(): Promise<void> {
+    Logger.info('connecting to a server...')
+
     return this.rtm
       .start()
       .then(async (data: any) => {
+        Logger.info(`connected to ${data.team.name}`)
         this.id = data.team.id
+        this.name = data.team.name
         this.userID = data.self.id
 
         const teamInfo = await this.getTeamInfo()
@@ -59,6 +65,7 @@ class TeamConnection {
   }
 
   private async fetchChannels() {
+    Logger.info(`fetching channels for ${this.name}`)
     let channelResponse = await this.webClient.conversations.list({
       types: 'public_channel,private_channel,im,mpim',
     })
@@ -67,11 +74,13 @@ class TeamConnection {
 
     while (isPaginating) {
       channelResponse.channels.forEach(async (data: any) => {
+        Logger.info(data, `adding channel`)
         addChannel(this, data)
 
         if (data.is_member) {
           try {
             if (data.is_mpim) {
+              Logger.info(data, `mpim history`)
               const history = await this.webClient.conversations.history({
                 channel: data.id,
               })
@@ -80,6 +89,7 @@ class TeamConnection {
                 addMessage(this.id, data.id, rawMessage, false)
               })
             } else {
+              Logger.info(data, `other history`)
               const history = await this.webClient.channels.history({
                 channel: data.id,
               })
@@ -89,7 +99,7 @@ class TeamConnection {
               })
             }
           } catch (e) {
-            console.log(e)
+            Logger.info(`error fetching history for: ${data.name}`)
           }
         }
       })
@@ -106,6 +116,7 @@ class TeamConnection {
   }
 
   private async fetchUsers() {
+    Logger.info(`fetching users for ${this.name}`)
     let data: any = await this.webClient.users.list()
     let isPaginating = true
 
@@ -117,6 +128,7 @@ class TeamConnection {
           cursor: data.response_metadata.next_cursor,
         })
         isPaginating = true
+        Logger.info(`paginating users for ${this.name}`)
       } else {
         isPaginating = false
       }
