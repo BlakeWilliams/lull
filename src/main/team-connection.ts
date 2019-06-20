@@ -92,16 +92,16 @@ class TeamConnection {
             console.log(e)
           }
         }
-
-        if (channelResponse.response_metadata.next_cursor) {
-          channelResponse = await this.webClient.channels.list({
-            cursor: channelResponse.response_metadata.next_cursor,
-          })
-          isPaginating = true
-        } else {
-          isPaginating = false
-        }
       })
+
+      if (channelResponse.response_metadata.next_cursor) {
+        channelResponse = await this.webClient.channels.list({
+          cursor: channelResponse.response_metadata.next_cursor,
+        })
+        isPaginating = true
+      } else {
+        isPaginating = false
+      }
     }
   }
 
