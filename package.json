@@ -40,7 +40,7 @@
     "classnames": "^2.2.6",
     "electron-redux": "^1.4.0",
     "electron-store": "^3.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "pino": "^5.12.6",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
